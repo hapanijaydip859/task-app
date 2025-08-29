@@ -4,7 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://127.0.0.1:27017/otp-application')
+mongoose.connect(process.env.MONGO_URL)
   .then(() => console.log('Connected!'))
   .catch(error => console.log(error.message));
 
