@@ -17,10 +17,10 @@ router.post('/create' ,UserMiddleware.sequre,UserController.CreateTask)
 // router.get('/Find', UserController.Findtask)
 // router.get('/FindOne/:id' , UserController.FindOnetask)
 router.patch('/Update/:taskId', UserMiddleware.sequre, UserController.UpdateTask)
-router.delete('/Delete/:id', UserController.DeleteTask)
-router.post('/tasks/add-note', UserController.addNote)
+router.delete('/Delete/:taskId', UserMiddleware.sequre,UserController.DeleteTask)
+router.post('/tasks/add-note', UserMiddleware.sequre,UserController.addNote)
 // router.patch('/tasks/marks-As-Done/:id' , UserController.markAsDone)
 // router.patch('/tasks/mark-Undone/:id', UserController.markAsUnDone)
-router.patch('/mark-status/:id', UserController.markTaskStatus)
+router.patch('/mark-status/:id', UserMiddleware.sequre,UserController.markTaskStatus)
 
 module.exports = router;
