@@ -16,7 +16,7 @@ router.get('/my-tasks', UserMiddleware.sequre, UserController.getMyTasks);
 router.post('/create' ,UserMiddleware.sequre,UserController.CreateTask)
 // router.get('/Find', UserController.Findtask)
 // router.get('/FindOne/:id' , UserController.FindOnetask)
-router.patch('/Update/:id', UserController.UpdateTask)
+router.patch('/Update/:taskId', UserMiddleware.sequre, UserController.UpdateTask)
 router.delete('/Delete/:id', UserController.DeleteTask)
 router.post('/tasks/add-note', UserController.addNote)
 // router.patch('/tasks/marks-As-Done/:id' , UserController.markAsDone)

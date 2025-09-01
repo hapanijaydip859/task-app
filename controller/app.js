@@ -112,7 +112,6 @@ exports.UserLogin = async (req, res) => {
         if (!/^[0-9]{10}$/.test(mo)) {
             return res.status(400).json({ message: "Invalid mobile format" });
         }
-
         const user = await APP.findOne({ mo });
         const existingOtp = await Otp.findOne({ mo });
 
@@ -125,7 +124,7 @@ exports.UserLogin = async (req, res) => {
 
 
         if (user && user.isVerified) {
-            const token = jwt.sign({ id: user._id }, "verifyotp", { expiresIn: "1h" });
+            const token = jwt.sign({ id: user._id }, "verifyotp", { expiresIn: "1d" });
             return res.status(200).json({
                 status: "success",
                 message: "Login successful",
@@ -253,9 +252,10 @@ exports.UserFind = async function (req, res) {
 }
 exports.UserFindOne = async function (req, res) {
     try {
-        let Userfindone = await APP.findById(req.params.id)
+        const userId = req.user._id
+        let Userfindone = await APP.findOne(userId)
 
-        //   console.log(Userfindone);
+        //    console.log("findone == > ",Userfindone);
         if (!Userfindone) { throw new Error("Not found") }
         res.status(201).json({
             status: 'success',
@@ -271,9 +271,14 @@ exports.UserFindOne = async function (req, res) {
 }
 exports.UserUpadate = async function (req, res) {
     try {
+        const userId = req.user.id
+        console.log("Id ==> ", userId);
 
-        let Userupadate = await APP.findByIdAndUpdate(req.params.id, req.body, { new: true })
-        console.log(Userupadate);
+        const { mo } = req.body
+        console.log("mo ==> ", mo);
+
+        let Userupadate = await APP.findByIdAndUpdate(userId, { mo }, { new: true })
+        console.log("Update ==> ", Userupadate);
 
         if (!Userupadate) { throw new Error("Not update") }
         res.status(202).json({
@@ -290,7 +295,8 @@ exports.UserUpadate = async function (req, res) {
 }
 exports.UserDelete = async function (req, res) {
     try {
-        let Userdelete = await APP.findByIdAndDelete(req.params.id)
+        const userId = req.user._id
+        let Userdelete = await APP.findByIdAndDelete(userId)
         if (!Userdelete) { throw new Error("User Not Found") }
         res.status(202).json({
             status: 'success',

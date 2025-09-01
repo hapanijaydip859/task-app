@@ -35,5 +35,5 @@ const AppUser = new Schema({
 
     }
 })
-const APP = mongoose.model('app', AppUser);
+const APP = mongoose.model('app', AppUser , "apps");
 module.exports = APP;

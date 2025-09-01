@@ -37,16 +37,16 @@ exports.getMyTasks = async function (req, res) {
         console.log("Skip", skip);
         const search = req.query.q ? req.query.q.trim() : '';
         console.log("Search ==> ", search);
-         const priority = req.query.priority
-         console.log("Userpriority ==> ", priority);
-      
+        const priority = req.query.priority
+        console.log("Userpriority ==> ", priority);
+
         let query = { userId };
         console.log(" query ==> ", query);
         if (search) {
             console.log(query.task = { $regex: search, $options: 'i' });
         }
-        if(priority){
-            query.priority = {$regex: priority, $options: 'i'}
+        if (priority) {
+            query.priority = { $regex: priority, $options: 'i' }
         }
         const totalTasks = await TASK.countDocuments(query);
         const tasks = await TASK.find(query)
@@ -70,7 +70,7 @@ exports.CreateTask = async function (req, res) {
     try {
         const userId = req.user._id
         // console.log("userid ==> ",userId);
-        
+
         const requiredFields = ["task", "priority", "date", "time"];
         for (const field of requiredFields) {
             if (!req.body[field]) {
@@ -83,7 +83,7 @@ exports.CreateTask = async function (req, res) {
 
         const currentuser = await APP.findById(userId)
         // console.log("current ==> ",currentuser);
-        
+
         currentuser.Usertask.push(savedTask._id)
         await currentuser.save();
 
@@ -144,7 +144,17 @@ exports.FindOnetask = async function (req, res) {
 // Update a task by ID
 exports.UpdateTask = async function (req, res) {
     try {
-        const Updatetask = await TASK.findByIdAndUpdate(req.params.id, req.body, { new: true })
+  
+        const { taskId } = req.params
+        console.log("taskId ==> ",taskId);
+        
+         const Updatetask = await TASK.findByIdAndUpdate(
+            _id : taskId,  userId        // 🔑 ekaj id pass karvi
+            { ...req.body }, // update fields
+            { new: true}
+        );
+        console.log("update ==> " , Updatetask);
+        
         if (!Updatetask) { return res.status(404).json({ message: 'task not update' }) }
         res.status(200).json({
             status: 'success',
@@ -201,8 +211,8 @@ exports.markTaskStatus = async function (req, res) {
         // Accept status from body, query, or default to 'Done'
         const status = req.body.status || req.query.status || 'pending';
         console.log(status);
-        
-        if (![ 'pending','Done', 'Undone'].includes(status)) {
+
+        if (!['pending', 'Done', 'Undone'].includes(status)) {
             return res.status(400).json({ message: 'Invalid status. Use "Done" or "Undone".' });
         }
         const task = await TASK.findByIdAndUpdate(
