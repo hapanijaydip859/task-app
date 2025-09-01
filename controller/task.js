@@ -144,17 +144,17 @@ exports.FindOnetask = async function (req, res) {
 // Update a task by ID
 exports.UpdateTask = async function (req, res) {
     try {
-  
+        const userId = req.user._id
         const { taskId } = req.params
-        console.log("taskId ==> ",taskId);
-        
-         const Updatetask = await TASK.findByIdAndUpdate(
-            _id : taskId,  userId        // 🔑 ekaj id pass karvi
+        console.log("taskId ==> ", taskId);
+
+        const Updatetask = await TASK.findByIdAndUpdate(
+            taskId,          // 🔑 ekaj id pass karvi
             { ...req.body }, // update fields
-            { new: true}
+            { new: true }
         );
-        console.log("update ==> " , Updatetask);
-        
+        console.log("update ==> ", Updatetask);
+
         if (!Updatetask) { return res.status(404).json({ message: 'task not update' }) }
         res.status(200).json({
             status: 'success',
