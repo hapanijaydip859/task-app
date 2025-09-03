@@ -13,7 +13,7 @@ router.post('/Login', UserController.UserLogin)
 // router.post('/send-otp', UserController.gereteotp)
 router.post('/verify-otp', UserController.verifyOtp)
 // router.get('/Find', UserMiddleware.sequre, UserController.UserFind)
-// router.get('/findOne', UserMiddleware.sequre, UserController.UserFindOne)
+ router.get('/findOne', UserMiddleware.sequre, UserController.UserFindOne)
 router.patch('/Update', UserMiddleware.sequre, UserController.UserUpadate)
 router.delete('/Delete', UserMiddleware.sequre, UserController.UserDelete)
 module.exports = router;

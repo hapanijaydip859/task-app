@@ -9,9 +9,9 @@ exports.sequre = async function (req, res, next) {
 
         if (!token) { throw new Error("please require token") }
         let decode = jwt.verify(token, 'verifyotp')
-        //   console.log(decode);
+          console.log(decode);
 
-        const usercheck = await APP.findOne({ id : decode._id});
+        const usercheck = await APP.findOne({ _id : decode.id});
         //  console.log(usercheck);
 
         if (!usercheck) {
