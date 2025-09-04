@@ -39,9 +39,23 @@ exports.getMyTasks = async function (req, res) {
         console.log("Search ==> ", search);
         const priority = req.query.priority
         console.log("Userpriority ==> ", priority);
+        const { startDate, EndDate } = req.query
+
+
 
         let query = { userId };
         console.log(" query ==> ", query);
+
+
+        if (startDate && EndDate) {
+            query.createdAt = {
+                $gte: new Date(startDate),
+                $lte: new Date(EndDate)
+            }
+        }else if (startDate) {
+            query.createdAt = { $gte: new Date(startDate) };
+        }
+
         if (search) {
             console.log(query.task = { $regex: search, $options: 'i' });
         }
@@ -52,6 +66,7 @@ exports.getMyTasks = async function (req, res) {
         const tasks = await TASK.find(query)
             .skip(skip)
             .limit(limit);
+        console.log("task == > ", tasks);
 
         res.status(200).json({
             status: 'success',
@@ -168,10 +183,10 @@ exports.UpdateTask = async function (req, res) {
 // Delete a task by ID
 exports.DeleteTask = async function (req, res) {
     try {
-        const {taskId} = req.params
+        const { taskId } = req.params
         const Deletetask = await TASK.findByIdAndDelete(taskId)
-        console.log("delete" , Deletetask);
-        
+        console.log("delete", Deletetask);
+
         if (!Deletetask) { return res.status(402).json({ message: 'task is not found ' }) }
         res.status(200).json({
             status: 'success',
