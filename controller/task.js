@@ -46,21 +46,21 @@ exports.getMyTasks = async function (req, res) {
         let query = { userId };
         console.log(" query ==> ", query);
 
+        if (search) {
+            console.log(query.task = { $regex: search, $options: 'i' });
+        }
 
+        if (priority) {
+            query.priority = { $regex: priority, $options: 'i' }
+        }
+        
         if (startDate && EndDate) {
-            query.createdAt = {
+            query.date = {
                 $gte: new Date(startDate),
                 $lte: new Date(EndDate)
             }
         }else if (startDate) {
-            query.createdAt = { $gte: new Date(startDate) };
-        }
-
-        if (search) {
-            console.log(query.task = { $regex: search, $options: 'i' });
-        }
-        if (priority) {
-            query.priority = { $regex: priority, $options: 'i' }
+            query.date = { $gte: new Date(startDate) };
         }
         const totalTasks = await TASK.countDocuments(query);
         const tasks = await TASK.find(query)
